@@ -1,0 +1,78 @@
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: #fff;
+}
+
+a {
+  text-decoration: none;
+}
+
+.auth-card {
+  max-width: 520px;
+  margin: 60px auto;
+}
+
+.dashboard-card {
+  border: 0;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+.live-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  display: inline-block;
+  background: #0f9d58;
+  margin-right: 7px;
+}
+
+.hero-actions .btn {
+  margin-right: 12px;
+}
+
+.navbar .nav-link.active {
+  color: var(--bs-primary) !important;
+}
+
+.section-title {
+  max-width: 800px;
+}
+
+
+/* ============================= */
+/* NAVBAR CLICK FIX              */
+/* ============================= */
+
+.header-top {
+  position: relative;
+  z-index: 9999;
+}
+
+.nav-bar {
+  position: relative;
+  z-index: 10000;
+}
+
+.navbar {
+  position: relative;
+  z-index: 10001;
+}
+
+.navbar-nav {
+  position: relative;
+  z-index: 10002;
+}
+
+.navbar-nav .nav-link {
+  position: relative;
+  z-index: 10003;
+  pointer-events: auto;
+}
+
+.carousel-caption {
+  z-index: 1;
+}
