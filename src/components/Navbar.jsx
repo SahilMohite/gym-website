@@ -1,4 +1,7 @@
 import { NavLink } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { ref, get } from "firebase/database";
+import { db } from "../firebase/firebase";
 import { useAuth } from "../context/AuthContext";
 
 const links = [
@@ -11,9 +14,38 @@ const links = [
 
 export default function Navbar() {
   const { user } = useAuth();
+  const [role, setRole] = useState(null);
 
-  // Where should the customer go when clicking Member Area?
-  const memberAreaLink = user ? "/dashboard" : "/login";
+  useEffect(() => {
+    const checkUserRole = async () => {
+      if (!user) {
+        setRole(null);
+        return;
+      }
+
+      try {
+        const snapshot = await get(ref(db, `users/${user.uid}`));
+
+        if (snapshot.exists()) {
+          const userData = snapshot.val();
+          setRole(userData.role || "customer");
+        } else {
+          setRole("customer");
+        }
+      } catch (error) {
+        console.error("Error checking user role:", error);
+        setRole("customer");
+      }
+    };
+
+    checkUserRole();
+  }, [user]);
+
+  const memberAreaLink = !user
+    ? "/login"
+    : role === "admin"
+    ? "/admin"
+    : "/dashboard";
 
   return (
     <div className="container-fluid header-top">
