@@ -203,3 +203,161 @@
     animation: none !important;
   }
 }
+
+
+/* ================================
+   DASHBOARD ENTRANCE ANIMATIONS
+================================ */
+
+.dashboard-entrance {
+  animation: dashboardFadeUp 0.65s ease-out both;
+}
+
+@keyframes dashboardFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ================================
+   DASHBOARD CARD HOVER EFFECTS
+================================ */
+
+.dashboard-card-hover {
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
+  will-change: transform;
+}
+
+.dashboard-card-hover:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.10);
+}
+
+.dashboard-action-card {
+  cursor: pointer;
+}
+
+.dashboard-action-card:focus-visible {
+  outline: 3px solid #0d6efd;
+  outline-offset: 4px;
+}
+
+/* ================================
+   PORTAL ICON ANIMATION
+================================ */
+
+.dashboard-action-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease;
+}
+
+.dashboard-action-card:hover .dashboard-action-icon {
+  transform: scale(1.12);
+}
+
+/* ================================
+   BUTTON INTERACTIONS
+================================ */
+
+.dashboard-animated-button {
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.dashboard-animated-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 14px rgba(0, 0, 0, 0.12);
+}
+
+.dashboard-animated-button:active {
+  transform: scale(0.97);
+}
+
+/* ================================
+   LOADING SPINNER
+================================ */
+
+.dashboard-loading-spinner {
+  width: 38px;
+  height: 38px;
+  margin: 0 auto;
+  border: 3px solid #e5e7eb;
+  border-top-color: #0d6efd;
+  border-radius: 50%;
+  animation: dashboardSpin 0.8s linear infinite;
+}
+
+@keyframes dashboardSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ================================
+   REDUCED MOTION ACCESSIBILITY
+================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .dashboard-entrance {
+    animation: none;
+  }
+
+  .dashboard-card-hover,
+  .dashboard-action-icon,
+  .dashboard-animated-button {
+    transition: none;
+  }
+
+  .dashboard-card-hover:hover,
+  .dashboard-action-card:hover .dashboard-action-icon,
+  .dashboard-animated-button:hover,
+  .dashboard-animated-button:active {
+    transform: none;
+  }
+
+  .dashboard-loading-spinner {
+    animation: none;
+  }
+}
+
+/* ================================
+   MOBILE RESPONSIVENESS
+================================ */
+
+@media (max-width: 576px) {
+  .dashboard-header {
+    gap: 16px;
+    align-items: flex-start !important;
+  }
+
+  .dashboard-title {
+    font-size: 1.4rem;
+  }
+
+  .dashboard-subtitle {
+    font-size: 0.9rem;
+  }
+
+  .dashboard-header .btn {
+    flex-shrink: 0;
+  }
+
+  .dashboard-classes-content {
+    align-items: flex-start !important;
+    flex-direction: column;
+    gap: 16px;
+  }
+}
+

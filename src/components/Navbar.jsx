@@ -9,14 +9,17 @@ const links = [
   ["/about", "About"],
   ["/courses", "Courses"],
   ["/blog", "Blogs"],
-  ["/contact", "Contact"]
+  ["/contact", "Contact"],
 ];
 
 export default function Navbar() {
   const { user } = useAuth();
   const [role, setRole] = useState(null);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
+    let active = true;
+
     const checkUserRole = async () => {
       if (!user) {
         setRole(null);
@@ -26,229 +29,273 @@ export default function Navbar() {
       try {
         const snapshot = await get(ref(db, `users/${user.uid}`));
 
-        if (snapshot.exists()) {
-          const userData = snapshot.val();
-          setRole(userData.role || "customer");
-        } else {
-          setRole("customer");
-        }
+        if (!active) return;
+
+        setRole(
+          snapshot.exists()
+            ? snapshot.val().role || "customer"
+            : "customer"
+        );
       } catch (error) {
         console.error("Error checking user role:", error);
-        setRole("customer");
+        if (active) setRole("customer");
       }
     };
 
     checkUserRole();
+
+    return () => {
+      active = false;
+    };
   }, [user]);
 
   const memberAreaLink = !user
     ? "/login"
     : role === "admin"
-    ? "/admin"
-    : "/dashboard";
+      ? "/admin"
+      : "/dashboard";
+
+  const closeMenu = () => setMenuOpen(false);
+
+  const navLinkClass = ({ isActive }) =>
+    `relative block px-3 py-3 text-sm font-semibold transition-colors duration-200
+    ${
+      isActive
+        ? "text-orange-400"
+        : "text-gray-300 hover:text-white"
+    }
+    after:absolute after:bottom-1 after:left-3 after:h-0.5
+    after:bg-orange-400 after:transition-all after:duration-300
+    ${
+      isActive
+        ? "after:w-[calc(100%-24px)]"
+        : "after:w-0 hover:after:w-[calc(100%-24px)]"
+    }`;
+
+  const mobileLinkClass = ({ isActive }) =>
+    `block rounded-xl px-4 py-3 text-sm font-semibold transition-colors ${
+      isActive
+        ? "bg-orange-500/15 text-orange-400"
+        : "text-gray-200 hover:bg-white/5 hover:text-orange-400"
+    }`;
 
   return (
-    <div className="container-fluid header-top">
-      <div className="nav-shaps-2"></div>
+    <header className="relative z-50 w-full bg-[#111315] text-white shadow-xl shadow-black/10">
+      {/* Top information strip */}
+      <div className="hidden border-b border-white/[0.08] lg:block">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-2.5">
+          <div className="flex items-center gap-6 text-xs tracking-wide text-gray-400">
+            <a
+              href="mailto:info@example.com"
+              className="transition-colors hover:text-orange-400"
+            >
+              <span className="mr-2 text-orange-400">✉</span>
+              info@example.com
+            </a>
 
-      <div className="container d-flex align-items-center">
-
-        {/* LOGO */}
-        <div className="d-flex align-items-center h-100">
-          <NavLink
-            to="/"
-            className="navbar-brand"
-            style={{ height: "125px" }}
-          >
-            <h1 className="text-primary mb-0">
-              <i className="fas fa-hand-rock me-2"></i>
-              Fitness
-            </h1>
-          </NavLink>
-        </div>
-
-        <div className="w-100 h-100">
-
-          {/* TOP BAR */}
-          <div
-            className="topbar px-0 py-2 d-none d-lg-block"
-            style={{ height: "45px" }}
-          >
-            <div className="row gx-0 align-items-center">
-
-              <div className="col-lg-8">
-                <div className="d-flex flex-wrap">
-
-                  <div className="pe-4">
-                    <a
-                      href="mailto:info@example.com"
-                      className="text-muted small"
-                    >
-                      <i className="fas fa-envelope text-primary me-2"></i>
-                      info@example.com
-                    </a>
-                  </div>
-
-                  <div>
-                    <span className="text-muted small">
-                      <i className="fa fa-clock text-primary me-2"></i>
-                      Mon - Sat: 8.00 am-7.00 pm
-                    </span>
-                  </div>
-
-                </div>
-              </div>
-
-              {/* RIGHT SIDE */}
-              <div className="col-lg-4 text-lg-end">
-                <div className="d-flex justify-content-end">
-
-                  <div className="d-flex align-items-center small">
-
-                    {/* MEMBER LOGIN / DASHBOARD */}
-                    <NavLink
-                      to={memberAreaLink}
-                      className="text-body me-3"
-                    >
-                      {user ? "Dashboard" : "Member Login"}
-                    </NavLink>
-
-                    {/* ADMIN LOGIN */}
-                    <NavLink
-                      to="/admin-login"
-                      className="text-body me-3"
-                    >
-                      Admin Login
-                    </NavLink>
-
-                    {/* REGISTER ONLY WHEN LOGGED OUT */}
-                    {!user && (
-                      <NavLink
-                        to="/register"
-                        className="text-body me-3"
-                      >
-                        Register
-                      </NavLink>
-                    )}
-
-                  </div>
-
-                  {/* SOCIAL ICONS */}
-                  <div className="d-flex pe-3">
-
-                    <a
-                      className="btn p-0 text-primary me-3"
-                      href="#"
-                    >
-                      <i className="fab fa-facebook-f"></i>
-                    </a>
-
-                    <a
-                      className="btn p-0 text-primary me-3"
-                      href="#"
-                    >
-                      <i className="fab fa-instagram"></i>
-                    </a>
-
-                    <a
-                      className="btn p-0 text-primary me-0"
-                      href="#"
-                    >
-                      <i className="fab fa-linkedin-in"></i>
-                    </a>
-
-                  </div>
-
-                </div>
-              </div>
-
-            </div>
+            <span>
+              <span className="mr-2 text-orange-400">◷</span>
+              MON – SAT · 8:00 AM – 7:00 PM
+            </span>
           </div>
 
-          {/* MAIN NAVBAR */}
-          <div
-            className="nav-bar px-0 py-lg-0"
-            style={{ height: "80px" }}
-          >
-            <nav className="navbar navbar-expand-lg navbar-light d-flex justify-content-lg-end">
+          <div className="flex items-center gap-5 text-xs font-medium">
+            <NavLink
+              to={memberAreaLink}
+              className="text-gray-400 transition-colors hover:text-orange-400"
+            >
+              {user ? "My Dashboard" : "Member Login"}
+            </NavLink>
 
-              {/* MOBILE LOGO */}
+            <span className="h-3 w-px bg-white/15" />
+
+            <NavLink
+              to="/admin-login"
+              className="text-gray-400 transition-colors hover:text-orange-400"
+            >
+              Admin
+            </NavLink>
+
+            {!user && (
               <NavLink
-                to="/"
-                className="navbar-brand-2 d-lg-none"
+                to="/register"
+                className="text-orange-400 transition-colors hover:text-orange-300"
               >
-                <h1 className="text-primary mb-0">
-                  <i className="fas fa-hand-rock me-2"></i>
-                  Fitness
-                </h1>
+                Join Now
               </NavLink>
-
-              {/* MOBILE MENU BUTTON */}
-              <button
-                className="navbar-toggler"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#mainNav"
-              >
-                <span className="navbar-toggler-icon"></span>
-              </button>
-
-              <div
-                className="collapse navbar-collapse justify-content-lg-end"
-                id="mainNav"
-              >
-                <div className="navbar-nav">
-
-                  {/* NORMAL LINKS */}
-                  {links.map(([to, label]) => (
-                    <NavLink
-                      key={to}
-                      to={to}
-                      end={to === "/"}
-                      className="nav-item nav-link"
-                    >
-                      {label}
-                    </NavLink>
-                  ))}
-
-                  <NavLink
-                    to="/features"
-                    className="nav-item nav-link"
-                  >
-                    Features
-                  </NavLink>
-
-                  <NavLink
-                    to="/trainers"
-                    className="nav-item nav-link"
-                  >
-                    Our Team
-                  </NavLink>
-
-                  {/* MEMBER AREA */}
-                  <NavLink
-                    to={memberAreaLink}
-                    className="nav-item nav-link"
-                  >
-                    {user ? "Dashboard" : "Member Area"}
-                  </NavLink>
-
-                  <NavLink
-                    to="/contact"
-                    className="nav-item nav-link"
-                  >
-                    Get Quote
-                  </NavLink>
-
-                </div>
-              </div>
-
-            </nav>
+            )}
           </div>
-
         </div>
       </div>
-    </div>
+
+      {/* Main navbar */}
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <nav className="flex min-h-[82px] items-center justify-between gap-4">
+          {/* Logo */}
+          <NavLink
+            to="/"
+            onClick={closeMenu}
+            className="group flex shrink-0 items-center gap-3"
+          >
+            <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-orange-500 text-xl font-black text-white shadow-lg shadow-orange-500/20 transition-transform duration-300 group-hover:rotate-[-6deg] group-hover:scale-105">
+              F
+            </span>
+
+            <span className="flex flex-col">
+              <span className="text-xl font-black uppercase leading-tight tracking-[0.12em] text-white sm:text-2xl">
+                Fitness
+              </span>
+              <span className="mt-1 text-[9px] font-bold uppercase tracking-[0.28em] text-orange-400">
+                Train. Transform. Thrive.
+              </span>
+            </span>
+          </NavLink>
+
+          {/* Desktop navigation */}
+          <div className="hidden items-center gap-1 lg:flex">
+            {links.map(([to, label]) => (
+              <NavLink
+                key={to}
+                to={to}
+                end={to === "/"}
+                className={navLinkClass}
+              >
+                {label}
+              </NavLink>
+            ))}
+
+            <NavLink
+              to="/features"
+              className={navLinkClass}
+            >
+              Features
+            </NavLink>
+
+            <NavLink
+              to="/trainers"
+              className={navLinkClass}
+            >
+              Our Team
+            </NavLink>
+
+            <NavLink
+              to={memberAreaLink}
+              className={navLinkClass}
+            >
+              {user ? "Dashboard" : "Member Area"}
+            </NavLink>
+          </div>
+
+          {/* Desktop CTA */}
+          <NavLink
+            to="/contact"
+            className="hidden shrink-0 items-center gap-2 rounded-lg bg-orange-500 px-5 py-3 text-sm font-bold text-white shadow-lg shadow-orange-500/10 transition-all duration-300 hover:-translate-y-0.5 hover:bg-orange-400 hover:shadow-orange-500/25 lg:inline-flex"
+          >
+            Get Started
+            <span aria-hidden="true">↗</span>
+          </NavLink>
+
+          {/* Mobile menu toggle */}
+          <button
+            type="button"
+            onClick={() => setMenuOpen((open) => !open)}
+            aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-expanded={menuOpen}
+            className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-2xl text-white transition-colors hover:border-orange-400/50 hover:bg-orange-500/10 hover:text-orange-400 lg:hidden"
+          >
+            {menuOpen ? "×" : "☰"}
+          </button>
+        </nav>
+
+        {/* Mobile navigation */}
+        {menuOpen && (
+          <div className="border-t border-white/10 pb-5 pt-4 lg:hidden">
+            <div className="space-y-1">
+              {links.map(([to, label]) => (
+                <NavLink
+                  key={to}
+                  to={to}
+                  end={to === "/"}
+                  onClick={closeMenu}
+                  className={mobileLinkClass}
+                >
+                  {label}
+                </NavLink>
+              ))}
+
+              <NavLink
+                to="/features"
+                onClick={closeMenu}
+                className={mobileLinkClass}
+              >
+                Features
+              </NavLink>
+
+              <NavLink
+                to="/trainers"
+                onClick={closeMenu}
+                className={mobileLinkClass}
+              >
+                Our Team
+              </NavLink>
+
+              <NavLink
+                to={memberAreaLink}
+                onClick={closeMenu}
+                className={mobileLinkClass}
+              >
+                {user ? "My Dashboard" : "Member Area"}
+              </NavLink>
+
+              <NavLink
+                to="/admin-login"
+                onClick={closeMenu}
+                className={mobileLinkClass}
+              >
+                Admin Login
+              </NavLink>
+
+              {!user && (
+                <>
+                  <NavLink
+                    to="/login"
+                    onClick={closeMenu}
+                    className={mobileLinkClass}
+                  >
+                    Member Login
+                  </NavLink>
+
+                  <NavLink
+                    to="/register"
+                    onClick={closeMenu}
+                    className={mobileLinkClass}
+                  >
+                    Register
+                  </NavLink>
+                </>
+              )}
+
+              <NavLink
+                to="/contact"
+                onClick={closeMenu}
+                className="mt-3 flex items-center justify-center gap-2 rounded-xl bg-orange-500 px-4 py-3.5 text-sm font-bold text-white transition-colors hover:bg-orange-400"
+              >
+                Get Started <span aria-hidden="true">↗</span>
+              </NavLink>
+            </div>
+
+            <div className="mt-5 border-t border-white/10 pt-4 text-center text-xs text-gray-500">
+              <a
+                href="mailto:info@example.com"
+                className="transition-colors hover:text-orange-400"
+              >
+                info@example.com
+              </a>
+              <p className="mt-2">MON – SAT · 8:00 AM – 7:00 PM</p>
+            </div>
+          </div>
+        )}
+      </div>
+    </header>
   );
 }
-
