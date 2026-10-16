@@ -1,4 +1,5 @@
-import { NavLink } from "react-router-dom";
+
+import { NavLink, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { ref, get } from "firebase/database";
 import { db } from "../firebase/firebase";
@@ -14,8 +15,12 @@ const links = [
 
 export default function Navbar() {
   const { user } = useAuth();
+  const location = useLocation();
+
   const [role, setRole] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
+
+  const isHome = location.pathname === "/";
 
   useEffect(() => {
     let active = true;
@@ -38,6 +43,7 @@ export default function Navbar() {
         );
       } catch (error) {
         console.error("Error checking user role:", error);
+
         if (active) setRole("customer");
       }
     };
@@ -48,6 +54,11 @@ export default function Navbar() {
       active = false;
     };
   }, [user]);
+
+  // Close the mobile menu whenever the route changes
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [location.pathname]);
 
   const memberAreaLink = !user
     ? "/login"
@@ -62,7 +73,7 @@ export default function Navbar() {
     ${
       isActive
         ? "text-orange-400"
-        : "text-gray-300 hover:text-white"
+        : "text-white/75 hover:text-white"
     }
     after:absolute after:bottom-1 after:left-3 after:h-0.5
     after:bg-orange-400 after:transition-all after:duration-300
@@ -76,15 +87,21 @@ export default function Navbar() {
     `block rounded-xl px-4 py-3 text-sm font-semibold transition-colors ${
       isActive
         ? "bg-orange-500/15 text-orange-400"
-        : "text-gray-200 hover:bg-white/5 hover:text-orange-400"
+        : "text-white/85 hover:bg-white/5 hover:text-orange-400"
     }`;
 
   return (
-    <header className="relative z-50 w-full bg-[#111315] text-white shadow-xl shadow-black/10">
+    <header
+      className={`${
+        isHome
+          ? "absolute left-0 top-0 bg-transparent"
+          : "relative bg-[#111315]/95 shadow-lg backdrop-blur-xl"
+      } z-50 w-full text-white transition-colors duration-300`}
+    >
       {/* Top information strip */}
-      <div className="hidden border-b border-white/[0.08] lg:block">
+      <div className="hidden border-b border-white/10 lg:block">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-2.5">
-          <div className="flex items-center gap-6 text-xs tracking-wide text-gray-400">
+          <div className="flex items-center gap-6 text-xs tracking-wide text-white/60">
             <a
               href="mailto:info@example.com"
               className="transition-colors hover:text-orange-400"
@@ -102,16 +119,16 @@ export default function Navbar() {
           <div className="flex items-center gap-5 text-xs font-medium">
             <NavLink
               to={memberAreaLink}
-              className="text-gray-400 transition-colors hover:text-orange-400"
+              className="text-white/60 transition-colors hover:text-orange-400"
             >
               {user ? "My Dashboard" : "Member Login"}
             </NavLink>
 
-            <span className="h-3 w-px bg-white/15" />
+            <span className="h-3 w-px bg-white/20" />
 
             <NavLink
               to="/admin-login"
-              className="text-gray-400 transition-colors hover:text-orange-400"
+              className="text-white/60 transition-colors hover:text-orange-400"
             >
               Admin
             </NavLink>
@@ -119,9 +136,9 @@ export default function Navbar() {
             {!user && (
               <NavLink
                 to="/register"
-                className="text-orange-400 transition-colors hover:text-orange-300"
+                className="font-bold text-orange-400 transition-colors hover:text-orange-300"
               >
-                Join Now
+                Join Now ↗
               </NavLink>
             )}
           </div>
@@ -130,14 +147,14 @@ export default function Navbar() {
 
       {/* Main navbar */}
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <nav className="flex min-h-[82px] items-center justify-between gap-4">
+        <nav className="flex min-h-[82px] items-center justify-between gap-4 sm:min-h-[90px]">
           {/* Logo */}
           <NavLink
             to="/"
             onClick={closeMenu}
             className="group flex shrink-0 items-center gap-3"
           >
-            <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-orange-500 text-xl font-black text-white shadow-lg shadow-orange-500/20 transition-transform duration-300 group-hover:rotate-[-6deg] group-hover:scale-105">
+            <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-orange-500 text-xl font-black text-white shadow-lg shadow-orange-500/20 transition duration-300 group-hover:rotate-[-6deg] group-hover:scale-105">
               F
             </span>
 
@@ -164,24 +181,15 @@ export default function Navbar() {
               </NavLink>
             ))}
 
-            <NavLink
-              to="/features"
-              className={navLinkClass}
-            >
+            <NavLink to="/features" className={navLinkClass}>
               Features
             </NavLink>
 
-            <NavLink
-              to="/trainers"
-              className={navLinkClass}
-            >
+            <NavLink to="/trainers" className={navLinkClass}>
               Our Team
             </NavLink>
 
-            <NavLink
-              to={memberAreaLink}
-              className={navLinkClass}
-            >
+            <NavLink to={memberAreaLink} className={navLinkClass}>
               {user ? "Dashboard" : "Member Area"}
             </NavLink>
           </div>
@@ -189,7 +197,7 @@ export default function Navbar() {
           {/* Desktop CTA */}
           <NavLink
             to="/contact"
-            className="hidden shrink-0 items-center gap-2 rounded-lg bg-orange-500 px-5 py-3 text-sm font-bold text-white shadow-lg shadow-orange-500/10 transition-all duration-300 hover:-translate-y-0.5 hover:bg-orange-400 hover:shadow-orange-500/25 lg:inline-flex"
+            className="hidden shrink-0 items-center gap-2 rounded-lg bg-orange-500 px-5 py-3 text-sm font-bold text-black shadow-lg shadow-orange-500/10 transition-all duration-300 hover:-translate-y-0.5 hover:bg-orange-400 lg:inline-flex"
           >
             Get Started
             <span aria-hidden="true">↗</span>
@@ -199,9 +207,11 @@ export default function Navbar() {
           <button
             type="button"
             onClick={() => setMenuOpen((open) => !open)}
-            aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-label={
+              menuOpen ? "Close navigation menu" : "Open navigation menu"
+            }
             aria-expanded={menuOpen}
-            className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-2xl text-white transition-colors hover:border-orange-400/50 hover:bg-orange-500/10 hover:text-orange-400 lg:hidden"
+            className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/20 bg-black/20 text-2xl text-white transition-colors hover:border-orange-400/50 hover:bg-orange-500/10 hover:text-orange-400 lg:hidden"
           >
             {menuOpen ? "×" : "☰"}
           </button>
@@ -209,8 +219,8 @@ export default function Navbar() {
 
         {/* Mobile navigation */}
         {menuOpen && (
-          <div className="border-t border-white/10 pb-5 pt-4 lg:hidden">
-            <div className="space-y-1">
+          <div className="absolute left-0 right-0 top-full border-t border-white/10 bg-[#111315]/98 px-4 pb-5 pt-4 shadow-2xl backdrop-blur-xl lg:hidden sm:px-6">
+            <div className="mx-auto max-w-7xl space-y-1">
               {links.map(([to, label]) => (
                 <NavLink
                   key={to}
@@ -278,20 +288,20 @@ export default function Navbar() {
               <NavLink
                 to="/contact"
                 onClick={closeMenu}
-                className="mt-3 flex items-center justify-center gap-2 rounded-xl bg-orange-500 px-4 py-3.5 text-sm font-bold text-white transition-colors hover:bg-orange-400"
+                className="mt-3 flex items-center justify-center gap-2 rounded-xl bg-orange-500 px-4 py-3.5 text-sm font-bold text-black transition-colors hover:bg-orange-400"
               >
                 Get Started <span aria-hidden="true">↗</span>
               </NavLink>
-            </div>
 
-            <div className="mt-5 border-t border-white/10 pt-4 text-center text-xs text-gray-500">
-              <a
-                href="mailto:info@example.com"
-                className="transition-colors hover:text-orange-400"
-              >
-                info@example.com
-              </a>
-              <p className="mt-2">MON – SAT · 8:00 AM – 7:00 PM</p>
+              <div className="mt-5 border-t border-white/10 pt-4 text-center text-xs text-white/50">
+                <a
+                  href="mailto:info@example.com"
+                  className="transition-colors hover:text-orange-400"
+                >
+                  info@example.com
+                </a>
+                <p className="mt-2">MON – SAT · 8:00 AM – 7:00 PM</p>
+              </div>
             </div>
           </div>
         )}
@@ -299,3 +309,4 @@ export default function Navbar() {
     </header>
   );
 }
+  
