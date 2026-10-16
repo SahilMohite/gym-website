@@ -1,0 +1,205 @@
+
+/* Dashboard foundation */
+.gym-dashboard {
+  --gym-accent: #ff6b35;
+  --gym-accent-dark: #e95725;
+  --gym-ink: #18212f;
+  --gym-muted: #748091;
+  --gym-surface: #ffffff;
+  --gym-border: #e9edf2;
+
+  min-height: 75vh;
+  padding-top: 2rem !important;
+  padding-bottom: 3.5rem !important;
+  color: var(--gym-ink);
+}
+
+/* Welcome section */
+.gym-dashboard .dashboard-header {
+  gap: 1.25rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem !important;
+}
+
+.gym-dashboard .dashboard-title {
+  font-size: clamp(1.65rem, 3vw, 2.25rem);
+  letter-spacing: -0.045em;
+  line-height: 1.2;
+}
+
+.gym-dashboard .dashboard-subtitle {
+  color: var(--gym-muted) !important;
+  font-size: 0.96rem;
+}
+
+/* Consistent card styling */
+.gym-dashboard .dashboard-stat-card,
+.gym-dashboard .dashboard-action-card,
+.gym-dashboard .dashboard-classes-card {
+  height: 100%;
+  background: var(--gym-surface);
+  border: 1px solid var(--gym-border) !important;
+  border-radius: 18px;
+  box-shadow: 0 4px 18px rgba(24, 33, 47, 0.035) !important;
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    border-color 180ms ease;
+}
+
+.gym-dashboard .dashboard-stat-card:hover,
+.gym-dashboard .dashboard-action-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 107, 53, 0.45) !important;
+  box-shadow: 0 12px 28px rgba(24, 33, 47, 0.09) !important;
+}
+
+.gym-dashboard .dashboard-stat-card {
+  border-top: 3px solid var(--gym-accent) !important;
+}
+
+.gym-dashboard .dashboard-stat-card .card-body {
+  padding: 1.4rem;
+}
+
+.gym-dashboard .dashboard-stat-label {
+  color: var(--gym-muted);
+  font-size: 0.83rem;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+}
+
+.gym-dashboard .dashboard-stat-value {
+  margin: 0.55rem 0;
+  color: var(--gym-ink);
+  font-size: clamp(1.2rem, 2vw, 1.55rem);
+  font-weight: 750;
+  letter-spacing: -0.035em;
+  overflow-wrap: anywhere;
+}
+
+/* Section headings */
+.gym-dashboard .dashboard-section-title {
+  color: var(--gym-ink);
+  font-size: 1.25rem;
+  font-weight: 750;
+  letter-spacing: -0.025em;
+}
+
+/* Portal action tiles */
+.gym-dashboard .dashboard-action-card {
+  cursor: pointer;
+}
+
+.gym-dashboard .dashboard-action-card .card-body {
+  padding: 1.6rem 1rem;
+}
+
+.gym-dashboard .dashboard-action-icon {
+  display: inline-flex;
+  width: 60px;
+  height: 60px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 18px;
+  background: #fff0e9;
+  font-size: 1.8rem !important;
+  transition:
+    transform 180ms ease,
+    background 180ms ease;
+}
+
+.gym-dashboard .dashboard-action-card:hover
+.dashboard-action-icon {
+  background: #ffe2d5;
+  transform: scale(1.06);
+}
+
+.gym-dashboard .dashboard-action-title {
+  color: var(--gym-ink);
+  font-size: 1.02rem;
+  font-weight: 700;
+}
+
+.gym-dashboard .dashboard-action-description {
+  color: var(--gym-muted) !important;
+  font-size: 0.87rem;
+  line-height: 1.55;
+}
+
+/* Upcoming classes panel */
+.gym-dashboard .dashboard-classes-card .card-body {
+  padding: 1.6rem;
+}
+
+.gym-dashboard .btn-primary {
+  background: var(--gym-accent);
+  border-color: var(--gym-accent);
+  font-weight: 600;
+}
+
+.gym-dashboard .btn-primary:hover {
+  background: var(--gym-accent-dark);
+  border-color: var(--gym-accent-dark);
+}
+
+.gym-dashboard .btn-outline-danger {
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.gym-dashboard .btn {
+  transition:
+    background-color 160ms ease,
+    transform 160ms ease;
+}
+
+.gym-dashboard .btn:active {
+  transform: scale(0.98);
+}
+
+/* Keyboard accessibility */
+.gym-dashboard .dashboard-action-card:focus-visible {
+  outline: 3px solid rgba(255, 107, 53, 0.45);
+  outline-offset: 3px;
+}
+
+/* Mobile layout */
+@media (max-width: 575.98px) {
+  .gym-dashboard {
+    padding-top: 1.25rem !important;
+    padding-bottom: 2rem !important;
+  }
+
+  .gym-dashboard .dashboard-header {
+    align-items: flex-start !important;
+  }
+
+  .gym-dashboard .dashboard-stat-card .card-body {
+    padding: 1.1rem;
+  }
+
+  .gym-dashboard .dashboard-action-card .card-body {
+    padding: 1.25rem 0.75rem;
+  }
+
+  .gym-dashboard .dashboard-action-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 14px;
+    font-size: 1.5rem !important;
+  }
+
+  .gym-dashboard .dashboard-classes-card .card-body {
+    padding: 1.25rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gym-dashboard *,
+  .gym-dashboard *::before,
+  .gym-dashboard *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}

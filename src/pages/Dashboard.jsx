@@ -3,6 +3,7 @@ import { onAuthStateChanged, signOut } from "firebase/auth";
 import { ref, get, onValue } from "firebase/database";
 import { auth, db } from "../firebase/firebase";
 import { useNavigate } from "react-router-dom";
+import "./Dashboard.css";
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -219,20 +220,20 @@ export default function Dashboard() {
   // =========================
 
   return (
-    <div className="container py-4">
+    <div className="container py-4 gym-dashboard">
 
       {/* TOP BAR */}
 
-      <div className="d-flex justify-content-between align-items-center mb-4">
+      <div className="d-flex justify-content-between align-items-center dashboard-header">
 
         <div>
-          <h2 className="fw-bold mb-1">
-            Welcome, {profile?.name || "Member"} 👋
-          </h2>
+          <h2 className="fw-bold mb-1 dashboard-title">
+  Welcome, {profile?.name || "Member"} 👋
+</h2>
 
-          <p className="text-muted mb-0">
-            Here's your gym membership overview.
-          </p>
+<p className="text-muted mb-0 dashboard-subtitle">
+  Here's your gym membership overview.
+</p>
         </div>
 
         <button
@@ -253,17 +254,17 @@ export default function Dashboard() {
 
         <div className="col-md-6 col-lg-3">
 
-          <div className="card shadow-sm border-0 h-100">
+          <div className="card dashboard-stat-card">
 
             <div className="card-body">
 
-              <p className="text-muted mb-2">
-                Membership
-              </p>
+              <p className="dashboard-stat-label mb-2">
+  Membership
+</p>
 
-              <h4 className="fw-bold">
-                {membership?.plan || "No Plan"}
-              </h4>
+<h4 className="dashboard-stat-value">
+  {membership?.plan || "No Plan"}
+</h4>
 
               <span
                 className={`badge ${
@@ -286,7 +287,7 @@ export default function Dashboard() {
 
         <div className="col-md-6 col-lg-3">
 
-          <div className="card shadow-sm border-0 h-100">
+          <div className="card dashboard-stat-card">
 
             <div className="card-body">
 
@@ -313,7 +314,7 @@ export default function Dashboard() {
 
         <div className="col-md-6 col-lg-3">
 
-          <div className="card shadow-sm border-0 h-100">
+          <div className="card dashboard-stat-card">
 
             <div className="card-body">
 
@@ -340,7 +341,7 @@ export default function Dashboard() {
 
         <div className="col-md-6 col-lg-3">
 
-          <div className="card shadow-sm border-0 h-100">
+          <div className="card dashboard-stat-card">
 
             <div className="card-body">
 
@@ -371,9 +372,9 @@ export default function Dashboard() {
 
       {/* PORTAL MENU */}
 
-      <h4 className="fw-bold mb-3">
-        My Gym Portal
-      </h4>
+        <h4 className="fw-bold mb-3">
+          My Gym Portal
+        </h4>
 
 
       <div className="row g-4">
@@ -384,24 +385,24 @@ export default function Dashboard() {
         <div className="col-md-6 col-lg-3">
 
           <div
-            className="card shadow-sm border-0 h-100"
+            className="card dashboard-action-card"
             style={{ cursor: "pointer" }}
             onClick={() => navigate("/profile")}
           >
 
             <div className="card-body text-center py-4">
 
-              <div style={{ fontSize: "40px" }}>
-                👤
-              </div>
+             <div className="dashboard-action-icon">
+  👤
+</div>
 
-              <h5 className="fw-bold mt-3">
-                My Profile
-              </h5>
+<h5 className="fw-bold mt-3 dashboard-action-title">
+  My Profile
+</h5>
 
-              <p className="text-muted mb-0">
-                View and edit your details
-              </p>
+<p className="text-muted mb-0 dashboard-action-description">
+  View and edit your details
+</p>
 
             </div>
 
@@ -415,22 +416,22 @@ export default function Dashboard() {
         <div className="col-md-6 col-lg-3">
 
           <div
-            className="card shadow-sm border-0 h-100"
+            className="card dashboard-action-card"
             style={{ cursor: "pointer" }}
             onClick={() => navigate("/attendance")}
           >
 
             <div className="card-body text-center py-4">
 
-              <div style={{ fontSize: "40px" }}>
+              <div className="dashboard-action-icon">
                 📅
               </div>
 
-              <h5 className="fw-bold mt-3">
+              <h5 className="fw-bold mt-3 dashboard-action-title">
                 Attendance
               </h5>
 
-              <p className="text-muted mb-0">
+              <p className="text-muted mb-0 dashboard-action-description">
                 Check your gym visits
               </p>
 
@@ -446,22 +447,22 @@ export default function Dashboard() {
         <div className="col-md-6 col-lg-3">
 
           <div
-            className="card shadow-sm border-0 h-100"
+            className="card dashboard-action-card"
             style={{ cursor: "pointer" }}
             onClick={() => navigate("/membership")}
           >
 
             <div className="card-body text-center py-4">
 
-              <div style={{ fontSize: "40px" }}>
+              <div className="dashboard-action-icon">
                 🏆
               </div>
 
-              <h5 className="fw-bold mt-3">
+              <h5 className="fw-bold mt-3 dashboard-action-title">
                 Membership
               </h5>
 
-              <p className="text-muted mb-0">
+              <p className="text-muted mb-0 dashboard-action-description">
                 Membership History
               </p>
 
@@ -477,22 +478,22 @@ export default function Dashboard() {
         <div className="col-md-6 col-lg-3">
 
           <div
-            className="card shadow-sm border-0 h-100"
+            className="card dashboard-action-card"
             style={{ cursor: "pointer" }}
             onClick={() => navigate("/payments")}
           >
 
             <div className="card-body text-center py-4">
 
-              <div style={{ fontSize: "40px" }}>
+              <div className="dashboard-action-icon">
                 💳
               </div>
 
-              <h5 className="fw-bold mt-3">
+              <h5 className="fw-bold mt-3 dashboard-action-title">
                 Payments
               </h5>
 
-              <p className="text-muted mb-0">
+              <p className="text-muted mb-0 dashboard-action-description">
                 Payment History
               </p>
 
@@ -507,7 +508,7 @@ export default function Dashboard() {
 
       {/* UPCOMING CLASSES */}
 
-      <div className="card shadow-sm border-0 mt-4">
+      <div className="card dashboard-classes-card mt-4">
 
         <div className="card-body p-4">
 
