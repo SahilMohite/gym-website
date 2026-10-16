@@ -15,11 +15,13 @@ import Classes from "./pages/Classes";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminClasses from "./pages/AdminClasses";
+import BackToTop from "./components/BackToTop";
 
 export default function App() {
   return (
     <AuthProvider>
       <Layout>
+        <BackToTop />
         <Routes>
           <Route
   path="/admin-login"

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { saveContactMessage } from "../services/gymService";
 
 export default function Footer() {
@@ -8,77 +9,239 @@ export default function Footer() {
   const subscribe = async (e) => {
     e.preventDefault();
     if (!email) return;
+
     try {
-      await saveContactMessage({ name: "Newsletter Subscriber", email, message: "Newsletter subscription" });
+      await saveContactMessage({
+        name: "Newsletter Subscriber",
+        email,
+        message: "Newsletter subscription",
+      });
+
       setMessage("Subscribed successfully.");
       setEmail("");
     } catch {
-      setMessage("Connect Firebase first to enable subscriptions.");
+      setMessage("Unable to subscribe. Please try again.");
     }
   };
 
+  const socialLinks = [
+    { name: "facebook-f", url: "#" },
+    { name: "twitter", url: "#" },
+    { name: "instagram", url: "#" },
+    { name: "linkedin-in", url: "#" },
+  ];
+
+  const quickLinks = [
+    { label: "Home", to: "/" },
+    { label: "About Us", to: "/about" },
+    { label: "Our Courses", to: "/courses" },
+    { label: "Our Features", to: "/features" },
+    { label: "Our Blog", to: "/blog" },
+    { label: "Contact", to: "/contact" },
+  ];
+
+  const recentWork = [
+    "work-9.jpg",
+    "work-10.jpg",
+    "work-11.jpg",
+    "work-12.jpg",
+    "work-1.jpg",
+    "work-2.jpg",
+    "work-3.jpg",
+    "work-4.jpg",
+  ];
+
   return (
-    <>
-      <div className="container-fluid footer py-5">
-        <div className="container py-5">
-          <div className="row g-5 mb-5 align-items-center">
-            <div className="col-lg-7">
-              <form onSubmit={subscribe} className="position-relative d-flex" style={{transform:"skew(18deg)"}}>
-                <input value={email} onChange={(e)=>setEmail(e.target.value)}
-                  className="form-control border-0 w-100 py-3 pe-5"
-                  placeholder="Email address to Subscribe" type="email" required />
-                <button className="btn-primary py-2 px-4 ms-3" type="submit"><span>Subscribe</span></button>
+    <footer className="bg-[#171918] text-[#B7BBB4]">
+      {/* Newsletter and social links */}
+      <div className="border-b border-white/10">
+        <div className="mx-auto max-w-7xl px-6 py-10 lg:px-8">
+          <div className="grid items-center gap-8 lg:grid-cols-2">
+            <div>
+              <p className="mb-2 text-sm font-semibold uppercase tracking-[0.2em] text-orange-500">
+                Stay Connected
+              </p>
+
+              <h3 className="text-2xl font-bold text-white sm:text-3xl">
+                Join Our Fitness Community
+              </h3>
+
+              <p className="mt-2 text-sm leading-6 text-[#B7BBB4]">
+                Get fitness updates, training tips, and the latest gym news.
+              </p>
+
+              <form
+                onSubmit={subscribe}
+                className="mt-5 flex max-w-xl flex-col gap-3 sm:flex-row"
+              >
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Enter your email address"
+                  aria-label="Email address"
+                  required
+                  className="min-w-0 flex-1 rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-white outline-none transition placeholder:text-gray-500 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20"
+                />
+
+                <button
+                  type="submit"
+                  className="rounded-lg bg-orange-500 px-6 py-3 font-semibold text-white transition duration-300 hover:bg-orange-600"
+                >
+                  Subscribe
+                </button>
               </form>
-              {message && <small className="text-white d-block mt-2">{message}</small>}
+
+              {message && (
+                <p
+                  role="status"
+                  className="mt-3 text-sm text-orange-400"
+                >
+                  {message}
+                </p>
+              )}
             </div>
-            <div className="col-lg-5">
-              <div className="d-flex align-items-center justify-content-center justify-content-lg-end">
-                {["facebook-f","twitter","instagram","linkedin-in"].map(icon => (
-                  <a key={icon} className="btn btn-primary btn-md-square me-3" href="#">
-                    <i className={`fab fa-${icon}`}></i>
+
+            <div className="flex flex-col items-start lg:items-end">
+              <p className="mb-4 text-sm font-medium text-white">
+                Follow our journey
+              </p>
+
+              <div className="flex gap-3">
+                {socialLinks.map((social) => (
+                  <a
+                    key={social.name}
+                    href={social.url}
+                    aria-label={social.name}
+                    className="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 text-white transition duration-300 hover:border-orange-500 hover:bg-orange-500 hover:text-white"
+                  >
+                    <i className={`fab fa-${social.name}`} />
                   </a>
                 ))}
               </div>
             </div>
           </div>
-          <div className="row g-5">
-            <div className="col-md-6 col-lg-3">
-              <div className="footer-item">
-                <h4 className="text-white mb-4"><i className="fas fa-hand-rock text-primary me-2"></i>Fitness</h4>
-                <p className="mb-0">Train smarter, build strength and stay consistent with your fitness journey.</p>
+        </div>
+      </div>
+
+      {/* Footer content */}
+      <div className="mx-auto max-w-7xl px-6 py-14 lg:px-8">
+        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
+          {/* Brand */}
+          <div>
+            <Link to="/" className="inline-flex items-center gap-3">
+              <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-orange-500 text-xl text-white">
+                <i className="fas fa-dumbbell" />
+              </span>
+
+              <span className="text-2xl font-extrabold tracking-wide text-white">
+                FITNESS<span className="text-orange-500">.</span>
+              </span>
+            </Link>
+
+            <p className="mt-5 max-w-xs text-sm leading-7">
+              Train smarter, build strength, and stay consistent with your
+              fitness journey. Your goals deserve your best effort.
+            </p>
+          </div>
+
+          {/* Quick links */}
+          <div>
+            <h4 className="mb-6 text-lg font-bold text-white">
+              Quick Links
+            </h4>
+
+            <div className="flex flex-col gap-3">
+              {quickLinks.map((link) => (
+                <Link
+                  key={link.label}
+                  to={link.to}
+                  className="group flex items-center gap-2 text-sm transition hover:text-orange-500"
+                >
+                  <span className="text-orange-500 transition group-hover:translate-x-1">
+                    →
+                  </span>
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          {/* Contact information */}
+          <div>
+            <h4 className="mb-6 text-lg font-bold text-white">
+              Contact Info
+            </h4>
+
+            <div className="flex flex-col gap-5 text-sm">
+              <div className="flex items-start gap-3">
+                <i className="fas fa-map-marker-alt mt-1 text-orange-500" />
+                <span>Pune, Maharashtra</span>
+              </div>
+
+              <div className="flex items-start gap-3">
+                <i className="fas fa-envelope mt-1 text-orange-500" />
+                <a
+                  href="mailto:info@example.com"
+                  className="transition hover:text-orange-500"
+                >
+                  info@example.com
+                </a>
+              </div>
+
+              <div className="flex items-start gap-3">
+                <i className="fas fa-phone-alt mt-1 text-orange-500" />
+                <a
+                  href="tel:+919876543210"
+                  className="transition hover:text-orange-500"
+                >
+                  +91 98765 43210
+                </a>
               </div>
             </div>
-            <div className="col-md-6 col-lg-3">
-              <div className="footer-item">
-                <h4 className="text-white mb-4">Quick Links</h4>
-                <a href="/">Home</a><a href="/about">About us</a><a href="/courses">Our Courses</a>
-                <a href="/features">Our Features</a><a href="/blog">Our Blog</a><a href="/contact">Contact</a>
-              </div>
-            </div>
-            <div className="col-md-6 col-lg-3">
-              <div className="footer-item">
-                <h4 className="text-white mb-4">Contact Info</h4>
-                <p><i className="fas fa-map-marker-alt text-primary me-2"></i>Pune, Maharashtra</p>
-                <p><i className="fas fa-envelope text-primary me-2"></i>info@example.com</p>
-                <p><i className="fa fa-phone-alt text-primary me-2"></i>+91 98765 43210</p>
-              </div>
-            </div>
-            <div className="col-md-6 col-lg-3">
-              <div className="footer-item">
-                <h4 className="text-white mb-4">Recent Work</h4>
-                <div className="row g-2">
-                  {["work-9.jpg","work-10.jpg","work-11.jpg","work-12.jpg","work-1.jpg","work-2.jpg","work-3.jpg","work-4.jpg"].map(img =>
-                    <div className="col-3" key={img}><img className="img-fluid" src={`/template/img/${img}`} alt="" /></div>
-                  )}
+          </div>
+
+          {/* Recent work */}
+          <div>
+            <h4 className="mb-6 text-lg font-bold text-white">
+              Recent Work
+            </h4>
+
+            <div className="grid grid-cols-4 gap-2">
+              {recentWork.map((img) => (
+                <div
+                  key={img}
+                  className="group aspect-square overflow-hidden rounded-lg border border-white/10"
+                >
+                  <img
+                    src={`/template/img/${img}`}
+                    alt="Fitness gallery"
+                    loading="lazy"
+                    className="h-full w-full object-cover transition duration-300 group-hover:scale-110 group-hover:opacity-80"
+                  />
                 </div>
-              </div>
+              ))}
             </div>
           </div>
         </div>
       </div>
-      <div className="container-fluid copyright py-4">
-        <div className="container text-center"><span>Fitness Gym • React + Firebase</span></div>
+
+      {/* Copyright */}
+      <div className="border-t border-white/10 bg-black/20">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-6 py-5 text-center text-sm sm:flex-row sm:text-left lg:px-8">
+          <p>
+            © {new Date().getFullYear()}{" "}
+            <Link to="/" className="font-semibold text-orange-500 hover:text-orange-400">
+              Fitness Gym
+            </Link>
+            . All rights reserved.
+          </p>
+
+          <p className="text-[#858A83]">
+            Built for strength. Designed for progress.
+          </p>
+        </div>
       </div>
-    </>
+    </footer>
   );
 }

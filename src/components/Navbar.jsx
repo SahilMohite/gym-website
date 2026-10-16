@@ -107,12 +107,12 @@ export default function Navbar() {
               className="transition-colors hover:text-orange-400"
             >
               <span className="mr-2 text-orange-400">✉</span>
-              info@example.com
+              gravityfitness@gmail.com
             </a>
 
             <span>
               <span className="mr-2 text-orange-400">◷</span>
-              MON – SAT · 8:00 AM – 7:00 PM
+              MON – SAT · 5:00 AM – 11:00 PM
             </span>
           </div>
 
@@ -126,21 +126,24 @@ export default function Navbar() {
 
             <span className="h-3 w-px bg-white/20" />
 
-            <NavLink
-              to="/admin-login"
-              className="text-white/60 transition-colors hover:text-orange-400"
-            >
-              Admin
-            </NavLink>
+            
+<NavLink
+  to="/admin-login"
+  className="text-white/70 transition-colors duration-300 hover:text-orange-500"
+>
+  Admin
+</NavLink>
 
-            {!user && (
-              <NavLink
-                to="/register"
-                className="font-bold text-orange-400 transition-colors hover:text-orange-300"
-              >
-                Join Now ↗
-              </NavLink>
-            )}
+{!user && (
+  <NavLink
+    to="/register"
+    className="inline-flex items-center gap-1 rounded-full bg-orange-500 px-5 py-2 font-semibold text-white transition-all duration-300 hover:bg-orange-600 hover:shadow-lg hover:shadow-orange-500/20"
+  >
+    Join Now <span>↗</span>
+  </NavLink>
+)}
+
+      
           </div>
         </div>
       </div>
